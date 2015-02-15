@@ -119,7 +119,7 @@ module Guard
       # Writes the `rerun.txt` file containing all failed features.
       #
       def write_rerun_features
-        File.open("rerun.txt", "w") do |f|
+        File.open(ENV["RERUN_TXT"] || "rerun.txt", "w") do |f|
           f.puts @file_names.join(" ")
         end
       end
