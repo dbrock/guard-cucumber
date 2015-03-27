@@ -121,6 +121,10 @@ module Guard
       failed
     end
 
+    def self.rerun_file
+      ENV["GUARD_CUCUMBER_RERUN_FILE"] || "rerun.txt"
+    end
+
     # Change the `--format` cli option.
     #
     # @param [String] format the new format

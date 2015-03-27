@@ -119,9 +119,13 @@ module Guard
       # Writes the `rerun.txt` file containing all failed features.
       #
       def write_rerun_features
-        File.open(ENV["RERUN_TXT"] || "rerun.txt", "w") do |f|
+        File.open(rerun_file, "w") do |f|
           f.puts @file_names.join(" ")
         end
+      end
+
+      def rerun_file
+        Guard::Cucumber.rerun_file
       end
 
       # Gives the icon name to use for the status.
