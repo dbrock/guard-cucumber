@@ -89,6 +89,8 @@ Former `:color`, `:drb`, `:port` and `:profile` options are thus deprecated and 
                                   # default: true
 
 :keep_failed => false             # Keep failed features until they pass
+                                  # This uses the temporary file `rerun.txt`;
+                                  # set `GUARD_CUCUMBER_RERUN_FILE` to override
                                   # default: true
 
 :run_all => { :cli => "-p" }      # Override any option when running all specs
