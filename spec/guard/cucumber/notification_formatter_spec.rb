@@ -6,6 +6,9 @@ RSpec.describe Guard::Cucumber::NotificationFormatter do
 
   context "after all features" do
     let(:step) { double("step") }
+    let(:step_match) { double("step_match") }
+    let(:feature_element) { double("feature_element") }
+    let(:file) { double("file") }
 
     before do
       allow(mother).to receive(:steps).with(:passed).and_return([step])
@@ -20,6 +23,20 @@ RSpec.describe Guard::Cucumber::NotificationFormatter do
         with("1 failed step, 1 skipped step, 1 undefined step, 1 pending " +
              "step, 1 passed step", title: "Cucumber Results", image: :failed)
 
+      subject.after_features(nil)
+    end
+
+    before { ENV["GUARD_CUCUMBER_RERUN_FILE"] = "foo/bar.txt" }
+    after { ENV.delete "GUARD_CUCUMBER_RERUN_FILE" }
+
+    it "writes to the rerun file" do
+      allow(Guard::Compat::UI).to receive(:notify)
+      allow(step_match).to receive(:format_args)
+      subject.step_name(nil, step_match, :failed, nil, nil, nil)
+      expect(file).to receive(:puts).with("features/foo")
+      expect(File).to receive(:open).with("foo/bar.txt", "w").and_yield(file)
+      allow(feature_element).to receive(:location).and_return("features/foo")
+      subject.after_feature_element(feature_element)
       subject.after_features(nil)
     end
   end

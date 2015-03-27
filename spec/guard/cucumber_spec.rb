@@ -148,6 +148,17 @@ RSpec.describe Guard::Cucumber do
       subject.run_on_modifications(["features/bar"])
     end
 
+    context "when GUARD_CUCUMBER_RERUN_FILE is set" do
+      before { ENV["GUARD_CUCUMBER_RERUN_FILE"] = "foo/bar.txt" }
+      after { ENV.delete "GUARD_CUCUMBER_RERUN_FILE" }
+
+      it "reads that file instead of rerun.txt" do
+        expect(runner).to receive(:run).and_return(false)
+        expect(File).to receive(:exist?).with("foo/bar.txt").and_return(false)
+        expect { subject.run_all }.to throw_symbol :task_has_failed
+      end
+    end
+
     context "with the :feature_sets option" do
       non_standard_feature_set = ["a_non_standard_feature_set"]
       let(:options) { { feature_sets: non_standard_feature_set } }
