@@ -113,12 +113,16 @@ module Guard
     def read_failed_features
       failed = []
 
-      if File.exist?("rerun.txt")
-        failed = File.open("rerun.txt") { |file| file.read.split(" ") }
-        File.delete("rerun.txt")
+      if File.exist?(rerun_file)
+        failed = File.open(rerun_file) { |file| file.read.split(" ") }
+        File.delete(rerun_file)
       end
 
       failed
+    end
+
+    def rerun_file
+      Guard::Cucumber.rerun_file
     end
 
     def self.rerun_file
